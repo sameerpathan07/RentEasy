@@ -1,4 +1,4 @@
-# RentEasy – Full Stack Rental Management Application 🏠
+# RentEasy – Full Stack Rental Management Application 
 
 RentEasy is a full-stack web application designed to simplify property rental management.  
 It allows users to browse rental properties, book rentals, and manage property listings efficiently.
@@ -7,7 +7,7 @@ This project demonstrates practical experience in **Java Full Stack Development*
 
 ---
 
-## 🔑 Key Features
+## Key Features
 - User registration and authentication
 - Property listing and property search
 - Rental booking functionality
@@ -17,7 +17,7 @@ This project demonstrates practical experience in **Java Full Stack Development*
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
 ### Backend
 - Java
@@ -43,7 +43,7 @@ This project demonstrates practical experience in **Java Full Stack Development*
 
 ---
 
-## 🏗 Project Architecture
+## Project Architecture
 - Frontend and backend are separated for scalability
 - REST APIs used for communication
 - MVC architecture followed in backend
@@ -51,7 +51,7 @@ This project demonstrates practical experience in **Java Full Stack Development*
 
 ---
 
-## ⚙️ How to Run the Application
+## How to Run the Application
 
 ### Backend Setup (Spring Boot)
 1. Open the `backend` folder in Eclipse or IntelliJ
