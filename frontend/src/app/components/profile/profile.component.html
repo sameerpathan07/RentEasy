@@ -1,0 +1,32 @@
+<div class="profile-wrapper" *ngIf="!loading">
+
+  <div class="profile-card">
+
+    <!-- Avatar -->
+    <div class="avatar">
+      {{ user.userName[0] | uppercase }}
+    </div>
+
+    <h2>{{ user.userName }}</h2>
+
+    <span class="role-badge">
+      {{ user.role }}
+    </span>
+
+    <div class="info-group">
+      <label>Email</label>
+      <p>{{ user.email }}</p>
+    </div>
+
+    <div class="info-group">
+      <label>Phone</label>
+      <p>{{ user.phoneNo }}</p>
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="loading" class="loading">
+  Loading profile...
+</div>

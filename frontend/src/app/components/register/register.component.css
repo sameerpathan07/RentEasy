@@ -1,0 +1,74 @@
+/* Register Component Styling (Consistent with Login) */
+.login-wrapper {
+  /* Ensure full height minus navbar (assuming 64px height) */
+  min-height: calc(100vh - 64px); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f3f7fb, #f7fafc); /* Subtle gradient background */
+  font-family: 'Inter', sans-serif;
+  padding: 20px; /* Add padding for mobile view */
+  background: linear-gradient(180deg, #4f46e5, #f7f7f9);
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  width: 100%;
+  max-width: 480px; /* Wider to accommodate two columns (Role and Phone No.) */
+  /* Updated box-shadow to be slightly bluer and more pronounced */
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.1); 
+  transition: transform 0.3s ease;
+}
+
+.login-card h2 {
+  color: #1e293b; /* Dark text for title */
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  /* NEW: Light indigo separator under the title */
+  border-bottom: 2px solid #e0e7ff; 
+}
+
+/* Base styling for all form controls (input, select) */
+.form-control {
+  height: 45px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #4f46e5; /* Indigo color focus */
+  /* Updated focus ring */
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.25); 
+  outline: none;
+}
+
+/* NEW: Validation Feedback Styling - for controls that are invalid and have been touched */
+.form-control.ng-invalid.ng-touched {
+  border-color: #ef4444; /* Red border for errors */
+  box-shadow: 0 0 0 1px #ef4444;
+}
+
+.login-card .form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  display: block; 
+  margin-bottom: 4px;
+}
+
+.small {
+  font-size: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .login-card {
+    padding: 20px;
+    margin: 0 10px;
+  }
+}

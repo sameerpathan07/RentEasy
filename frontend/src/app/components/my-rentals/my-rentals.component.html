@@ -1,0 +1,79 @@
+<div class="my-rentals">
+
+  <!-- 🔘 TABS -->
+  <div class="tabs">
+    <button
+      [class.active]="activeSection === 'wishlist'"
+      routerLink="/my-rentals/wishlist">
+      ❤️ Wishlist
+    </button>
+
+    <button
+      [class.active]="activeSection === 'applications'"
+      routerLink="/my-rentals/applications">
+      📄 Applications
+    </button>
+  </div>
+
+  <!-- ⏳ LOADING -->
+  <p *ngIf="loading">Loading...</p>
+
+  <!--  WISHLIST (WITH IMAGES) -->
+  <div *ngIf="activeSection === 'wishlist'">
+
+    <p *ngIf="wishlist.length === 0">No saved properties</p>
+
+    <div class="property-grid">
+      <div class="property-card" *ngFor="let item of wishlist">
+
+        <img
+          [src]="item.property.imageUrl"
+          alt="Property"
+          (click)="openProperty(item.property.id)"
+        />
+
+        <div class="info">
+          <h4>{{ item.property.title }}</h4>
+          <p>{{ item.property.location }}</p>
+          <p>{{ item.property.price | currency:"INR"}}</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!--  APPLICATIONS (NO IMAGES) -->
+  <div *ngIf="activeSection === 'applications'">
+
+    <div class="application-card" *ngFor="let app of applications">
+  <h4>{{ app.image?.title }}</h4>
+<p>
+  Status:
+  <span [class.approved]="app.status==='APPROVED'"
+        [class.rejected]="app.status==='REJECTED'"
+        [class.pending]="app.status==='PENDING'">
+    {{ app.status }}
+  </span>
+</p>
+
+
+  <p >
+    Meeting Date: {{ app.meetingDate  | date:'fullDate' }}
+  </p>
+
+  <p>Meeting Address: {{ app.address }}</p>
+  <div class="action-buttons">
+
+ <button
+ 
+  class="delete-btn"
+  (click)="deleteApplication(app.id)">
+  🗑 Delete
+</button>
+
+</div>
+</div>
+
+
+</div>
+</div>

@@ -1,0 +1,62 @@
+<div class="account-container">
+
+  <h2>Account Settings</h2>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button 
+      [class.active]="activeTab === 'profile'"
+      (click)="activeTab = 'profile'">
+      Profile
+    </button>
+
+    <button 
+      [class.active]="activeTab === 'security'"
+      (click)="activeTab = 'security'">
+      Security
+    </button>
+  </div>
+
+  <!-- PROFILE TAB -->
+  <div *ngIf="activeTab === 'profile'" class="tab-content">
+
+    <h3>My Profile</h3>
+
+    <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+
+      <input formControlName="userName" placeholder="Username"  readonly/>
+      <input formControlName="email" placeholder="Email" />
+      <input formControlName="phoneNo" placeholder="Phone Number" />
+
+      <button type="submit" class="primary">
+        Save Changes
+      </button>
+    </form>
+
+  </div>
+
+  <!-- SECURITY TAB -->
+  <div *ngIf="activeTab === 'security'" class="tab-content">
+
+    <h3>Change Password</h3>
+
+    <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" >
+      <input type="text" formControlName="userName" readonly/>
+
+      <input type="password" formControlName="oldPassword" placeholder="Old Password" />
+      <input type="password" formControlName="newPassword" placeholder="New Password" />
+
+      <button type="submit" class="primary">
+        Change Password
+      </button>
+    </form>
+
+    <hr />
+
+    <!-- <button class="danger" (click)="deleteAccount()">
+      Delete Account
+    </button> -->
+
+  </div>
+
+</div>

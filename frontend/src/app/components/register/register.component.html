@@ -1,0 +1,100 @@
+<div class="login-wrapper d-flex align-items-center justify-content-center">
+  <div class="login-card shadow-lg">
+
+    <h2 class="text-center mb-4 text-2xl font-bold text-gray-800">Create Account</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      
+      <!-- Username Field -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Username</label>
+        <input type="text" formControlName="userName"
+       placeholder="Choose a username" class="form-control" />
+
+        <div *ngIf="f['userName'].invalid && (f['userName'].dirty || f['userName'].touched)"
+     class="text-danger small mt-1">
+  Username is required.
+</div>
+
+      </div>
+
+      <!-- Email Field -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Email</label>
+        <input type="email" formControlName="email"
+               placeholder="Enter your email" class="form-control" />
+        <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="text-danger small mt-1">
+          <span *ngIf="f['email'].errors?.['required']">Email is required.</span>
+          <span *ngIf="f['email'].errors?.['email']">Enter a valid email address.</span>
+        </div>
+      </div>
+      
+      <!-- Role and Phone Number Row -->
+      <div class="grid grid-cols-2 gap-3">
+          <!-- Role Field -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Your Role</label>
+            <!-- Note: h-[45px] ensures height consistency with other inputs -->
+            <select formControlName="role" class="form-control h-[45px]"> 
+              <option value="Tenant">Tenant (Renting)</option>
+              <option value="Landlord">Landlord (Listing)</option>
+            </select>
+          </div>
+
+          <!-- Phone Number Field -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Phone No.</label>
+            <input type="tel" formControlName="phoneNo"
+                   placeholder="e.g., 1234567890" class="form-control" />
+            <div *ngIf="f['phoneNo'].invalid && (f['phoneNo'].dirty || f['phoneNo'].touched)" class="text-danger small mt-1">
+              <span *ngIf="f['phoneNo'].errors?.['required']">Phone is required.</span>
+              <span *ngIf="f['phoneNo'].errors?.['pattern']">10-digit format (numbers only).</span>
+            </div>
+          </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Password</label>
+        <input type="password" formControlName="password"
+               placeholder="Enter password (min 6 chars)" class="form-control" />
+        <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="text-danger small mt-1">
+          <span *ngIf="f['password'].errors?.['required']">Password is required.</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters.</span>
+        </div>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <!-- <div class="mb-3">
+        <label class="form-label fw-semibold">Confirm Password</label>
+        <input type="password" formControlName="confirmPassword"
+               placeholder="Confirm password" class="form-control" />
+        <div *ngIf="f['confirmPassword'].invalid && (f['confirmPassword'].dirty || f['confirmPassword'].touched)" class="text-danger small mt-1">
+          Confirm password is required.
+        </div> -->
+        <!-- Display custom password mismatch error -->
+        <!-- <div *ngIf="registerForm.errors?.['passwordMismatch'] && f['confirmPassword'].valid && f['confirmPassword'].touched" class="text-danger small mt-1">
+          Passwords must match.
+        </div>
+      </div> -->
+
+      <!-- General Error Message -->
+      <p class="text-danger text-center small" *ngIf="error">{{ error }}</p>
+
+      <!-- Submission Button -->
+      <button type="submit" [disabled]="registerForm.invalid || isSubmitting" class="btn btn-primary w-100 mt-3">
+        {{ isSubmitting ? 'Registering...' : 'Register' }}
+      </button>
+      
+
+
+    </form>
+
+    <div class="text-center mt-3">
+      <span class="small text-gray-500">Already have an account? </span>
+      <!-- Navigation link back to login -->
+      <a href="#" (click)="$event.preventDefault(); goToLogin.emit()" class="text-decoration-none small font-semibold text-indigo-600 hover:text-indigo-800 transition">Login here</a>
+    </div>
+
+  </div>
+</div>

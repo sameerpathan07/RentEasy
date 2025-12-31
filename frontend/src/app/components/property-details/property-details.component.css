@@ -1,0 +1,334 @@
+/* ===== Base Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #f1f5f9;
+  color: #1f2937;
+}
+
+/* ===== Page Container ===== */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.max-w-7xl {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.py-10 {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+/* ===== Fade Animation ===== */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Buttons ===== */
+.button-secondary {
+  padding: 12px 18px;
+  border: 2px solid #4f46e5;
+  background: transparent;
+  color: #4f46e5;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.button-secondary:hover {
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+/* ===== Details Card ===== */
+.bg-white {
+  background: #ffffff;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.rounded-xl {
+  border-radius: 18px;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+/* Grid layout */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ===== Property Image ===== */
+.property-image {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+}
+
+/* ===== Header Section ===== */
+.details-header {
+  padding: 24px;
+}
+
+.property-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.property-location {
+  margin-top: 6px;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+/* ===== Price ===== */
+.price-right {
+  margin-left: 25px;
+  margin-top: 16px;
+  text-align: left;
+}
+
+.price-left {
+  margin-left: 500px;
+  /* margin-top: 160px; */
+  /* text-align: left; */
+}
+
+.price-small {
+  display: inline-flex;
+  align-items: center;
+  background: #eef2ff;
+  color: #4f46e5;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 26px;
+  font-weight: 700;
+
+}
+
+.price-small span {
+  font-size: 14px;
+  margin-left: 4px;
+  color: #6b7280;
+}
+
+/* ===== Property Info ===== */
+.property-info-box {
+  margin: 24px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .property-info-box {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.property-info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.property-info-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.property-info-item span:last-child {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ===== About Section ===== */
+.about-box {
+  margin: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 2px;
+  
+}
+
+.about-title {
+  margin-top: 15px;
+  margin-left: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.about-text {
+  font-size: 15px;
+  margin-left: 10px;
+  color: #4b5563;
+  line-height: 1.7;
+  margin-bottom: 35px;
+}
+
+/* ===== Booking Form ===== */
+.booking-form-wrapper {
+  margin: 24px;
+  background: #f9fafb;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+
+  
+}
+
+.booking-form-wrapper h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.booking-grid {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .booking-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.booking-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.booking-input:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+/* Submit Button */
+.booking-submit {
+  margin-top: 15px;
+  width: 100%;
+  background: #4f46e5;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.booking-submit:hover {
+  background: #4338ca;
+}
+
+.booking-submit:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
+}
+
+/* Success Message */
+.booking-success {
+  margin-top: 12px;
+  color: #16a34a;
+  font-weight: 500;
+  text-align: center;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.action-right {
+  display: flex;
+  gap: 12px;
+}
+
+.save-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.save-icon {
+  margin-left: 250px;
+  width: 45px;
+  height: 45px;
+  transition: all 0.25s ease;
+}
+
+.save-btn:hover .save-icon {
+  transform: scale(1.1);
+}
+
+.landlord-box {
+  /* margin-left: 450px; */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 10px;
+  background: #f1f5f9;
+  border-radius: 99px;  /*pill shape */
+  font-size: 13px;
+  width: fit-content;
+}
+
+.landlord-label {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.landlord-name {
+  font-weight: 600;
+  color: #0f172a;
+}

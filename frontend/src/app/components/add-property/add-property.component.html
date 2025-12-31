@@ -1,0 +1,80 @@
+<div class="add-wrapper d-flex align-items-center justify-content-center">
+<div class="add-property-container">
+  <!-- your inputs here -->
+ Owner:
+<input
+  type="text"
+  [(ngModel)]="property.userName"
+  readonly>
+
+  Title:
+<input
+  type="text"
+  placeholder="Title"
+  [(ngModel)]="property.title">
+   
+
+Type of Property:
+<select [(ngModel)]="property.type">
+  <option value="Apartment">Apartment</option>
+  <option value="House">House</option>
+  <option value="Villa">Villa</option>
+  <option value="Studio">Studio</option>
+</select>
+
+Price:
+<input
+  type="text"
+  placeholder="Price"
+  [(ngModel)]="property.price">
+
+  Location:
+<input
+  type="text"
+  placeholder="Location"
+  [(ngModel)]="property.location">
+
+  Bedrooms:
+<input
+  type="text"
+  placeholder="Bedrooms"
+  [(ngModel)]="property.bedrooms">
+
+  Bathrooms:
+<input
+  type="text"
+  placeholder="Bathrooms"
+  [(ngModel)]="property.bathrooms">
+
+  Area in Sqft:
+<input
+  type="text"
+  placeholder="Area (sqft)"
+  [(ngModel)]="property.area">
+
+  Description:
+<textarea
+  placeholder="Description"
+  [(ngModel)]="property.description">
+</textarea>
+
+ Upload Image:
+<input type="file" (change)="onFileSelected($event)">
+
+Property is Available:
+<label>
+    
+  <input
+  type="checkbox"
+  name="available"
+  [(ngModel)]="property.available">
+
+  
+</label>
+
+<br><br>
+
+<button (click)="saveProperty()">Add Property</button>
+</div>
+
+

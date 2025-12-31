@@ -1,0 +1,93 @@
+<div class="landlord-applications">
+
+  <!--  TABS -->
+  <!-- <div class="tabs">
+    <button
+      [class.active]="activeTab === 'properties'"
+      (click)="switchTab('properties')">
+      🏠 My Properties
+    </button>
+
+    <button
+      [class.active]="activeTab === 'applications'"
+      (click)="switchTab('applications')">
+      📄 Applications
+    </button>
+  </div> -->
+
+  <p *ngIf="loading">Loading...</p>
+
+  <!--  MY PROPERTIES -->
+  <div *ngIf="activeTab === 'properties'">
+    <p *ngIf="properties.length === 0">No properties added yet</p>
+
+    <div class="property-grid">
+      <div class="property-card" *ngFor="let p of properties">
+        <img [src]="p.imageUrl"
+        (click)="openProperty(p.id)"   />
+        <h4>{{ p.title }}</h4>
+        <p>{{ p.location }}</p>
+        <p>{{ p.price | currency:"INR" }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!--  APPLICATIONS -->
+  <div *ngIf="activeTab === 'applications'">
+
+    <h2 style="margin-left: 20px;">Property Applications</h2>
+
+    <p *ngIf="!loading && applications.length === 0">
+      No applications received
+    </p>
+
+    <div class="application-card" *ngFor="let app of applications">
+
+      <h4>{{ app.image?.title }}</h4>
+
+      <p><strong>Tenant:</strong> {{ app.tenant?.userName }}</p>
+      <p><strong>Email:</strong> {{ app.tenant?.email }}</p>
+      <p><strong>Phone:</strong> {{ app.tenant?.phoneNo }}</p>
+
+      <p>
+        <strong>Meeting Date:</strong>
+        {{ app.meetingDate | date:'fullDate' }}
+      </p>
+
+      <p><strong>Address:</strong> {{ app.address }}</p>
+
+      <p>
+        <strong>Status:</strong>
+        <span class="status"
+              [class.pending]="app.status==='PENDING'"
+              [class.approved]="app.status==='APPROVED'"
+              [class.rejected]="app.status==='REJECTED'">
+          {{ app.status }}
+        </span>
+      </p>
+
+      <!--  ACTION BUTTONS -->
+      <div class="action-buttons">
+        <button
+          class="approve-btn"
+          (click)="updateStatus(app.id, 'APPROVED')">
+          ✅ Accept
+        </button>
+
+        <button
+          class="reject-btn"
+          (click)="updateStatus(app.id, 'REJECTED')">
+          ❌ Reject
+        </button>
+
+        <button
+          class="reject-btn"
+          (click)="deleteApplication(app.id)">
+          🗑 Delete
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

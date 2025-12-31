@@ -1,0 +1,105 @@
+<nav>
+  <a routerLink="/"></a>
+  <div class="nav-container">
+    <div class="nav-inner">
+
+      <div class="brand-wrapper" >
+        <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+         </svg>
+        <!-- <img src="assets/images/home2.png" class="logo-icon"> -->
+        <!-- <img src="assets/images/home3.png" class="logo-icon"> -->
+        <span class="brand-text">Rent Easy</span>
+      </div>
+
+      <div class="nav-links">
+        
+
+        <button routerLink="/properties">Properties</button>
+
+        <div class="dropdown" *ngIf="auth.role">
+           <!-- Show only if landlord -->
+        <button *ngIf="auth.role==='Landlord'" >Landlord Panel</button>
+
+          <div class="dropdown-content">
+            <a routerLink="/add-property">
+              <img src="assets/images/add.png" class="profile-icon">
+              Add Property</a>
+
+              <a routerLink="/landlord/properties">
+              <img src="assets/images/myProperty.png" class="profile-icon">
+               My Properties
+              </a>
+
+              <a routerLink="/landlord/applications">
+              <img src="assets/images/application.png" class="profile-icon">
+              View Applications</a>
+
+          </div>
+        </div>
+
+<div class="dropdown" *ngIf="auth.role">
+  <!-- Tenant only -->
+  <button *ngIf="auth.role === 'Tenant'" >
+    My Rentals
+  </button>
+
+  <div class="dropdown-content">
+    <a routerLink="/my-rentals/wishlist">
+      <img src="assets/images/like.gif" class="profile-icon">
+      Wish List
+    </a>
+
+    <a routerLink="/my-rentals/applications">
+      <img src="assets/images/booking.gif" class="profile-icon">
+      Applications
+    </a>
+  </div>
+</div>
+
+
+
+        <div class="nav-links">
+          <!-- Show Login button only if no role -->
+          <button *ngIf="!auth.role" routerLink="/login" >
+            Login</button>
+
+
+
+          <!-- Show Register button only if no role -->
+          <button *ngIf="!auth.role" routerLink="/register">Sign Up</button>
+
+        </div>
+
+        <div class="dropdown" *ngIf="auth.role">
+          <button class="dropdown-btn">
+            Account
+          </button>
+         
+          <div class="dropdown-content">
+
+            <a routerLink="/profile">
+             <img src="assets/images/profile.gif" class="profile-icon">
+              My Profile</a>
+
+            <a routerLink="/update-user">
+              <img src="assets/images/edit-profile.gif" class="profile-icon">
+              Update Profile</a>
+
+            <a routerLink="/account/delete" (click)="deleteAccount()">
+              <img src="assets/images/delete.gif" class="profile-icon">
+              Delete Account</a>
+              
+            <a routerLink="/account/logout" *ngIf="auth.role" (click)="logout()" >
+              <img src="assets/images/logout.gif" class="profile-icon">
+              Logout</a>
+          </div>
+          
+        </div>
+        
+
+      </div>
+    </div>
+  </div>
+</nav>
