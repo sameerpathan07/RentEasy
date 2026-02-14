@@ -101,7 +101,7 @@ export class PropertyDetailsComponent implements OnInit {
 
 removeFromWishlist() {
   this.http.delete(
-    `renteasy-production.up.railway.app/wishlist/remove/${this.property.id}/${this.userName}`
+    `https://renteasy-production.up.railway.app/wishlist/remove/${this.property.id}/${this.userName}`
   ).subscribe({
     next: () => {
       console.log('Removed from wishlist');
@@ -117,14 +117,14 @@ removeFromWishlist() {
 
   addToWishlist() {
     this.http.post(
-      `renteasy-production.up.railway.app/wishlist/add/${this.property.id}/${this.userName}`,
+      `https://renteasy-production.up.railway.app/wishlist/add/${this.property.id}/${this.userName}`,
       {}
     ).subscribe();
   }
 
   isSaved(userName: string, propertyId: number) {
     return this.http.get<boolean>(
-      `renteasy-production.up.railway.app/wishlist/exists/${userName}/${propertyId}`
+      `https://renteasy-production.up.railway.app/wishlist/exists/${userName}/${propertyId}`
     );
   }
 
@@ -165,7 +165,7 @@ removeFromWishlist() {
   };
 
   this.http.post(
-    `renteasy-production.up.railway.app/application/apply/${this.property.id}`,
+    `https://renteasy-production.up.railway.app/application/apply/${this.property.id}`,
     payload
   ).subscribe({
     next: () => {
