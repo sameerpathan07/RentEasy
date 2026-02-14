@@ -15,7 +15,7 @@ public class WebConfig {
 	            @Override
 	            public void addCorsMappings(CorsRegistry registry) {
 	                registry.addMapping("/**") // apply to all endpoints
-	                        .allowedOrigins("http://localhost:4200") // Angular app
+	                        .allowedOrigins("https://renteasy-six.vercel.app/") // Angular app
 	                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // allow preflighted DELETE
 	                        .allowedHeaders("*")
 	                        .allowCredentials(true);
