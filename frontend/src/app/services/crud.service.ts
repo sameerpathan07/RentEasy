@@ -8,7 +8,7 @@ export class CrudService {
 
 constructor(private http: HttpClient) { }
 
-private api = 'renteasy-production.up.railway.app';
+private api = 'https://renteasy-production.up.railway.app';
 
   getProfile(userName: string) {
     return this.http.get<any>(`${this.api}/profile/${userName}`);
@@ -24,7 +24,7 @@ private api = 'renteasy-production.up.railway.app';
 
   deleteUser(userName: string) {
   return this.http.delete(
-    `http://localhost:8091/user/delete/${userName}`
+    `https://renteasy-production.up.railway.app/user/delete/${userName}`
   );
 }
 }
