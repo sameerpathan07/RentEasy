@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
 
-  private baseUrl = 'renteasy-production.up.railway.app/user';
+  private baseUrl = 'https://renteasy-production.up.railway.app/user';
 
   constructor(private http: HttpClient) {}
 
