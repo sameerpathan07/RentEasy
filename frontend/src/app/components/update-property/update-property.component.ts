@@ -32,7 +32,7 @@ export class UpdatePropertyComponent implements OnInit {
 
     this.id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.http.get<Property>(`renteasy-production.up.railway.app/image/getImg/${this.id}`)
+    this.http.get<Property>(`https://renteasy-production.up.railway.app/image/getImg/${this.id}`)
       .subscribe(data => {
         this.property = data;
       });
@@ -57,7 +57,7 @@ export class UpdatePropertyComponent implements OnInit {
     );
 
     this.http.put(
-      `renteasy-production.up.railway.app/image/updateImg/${this.id}`,
+      `https://renteasy-production.up.railway.app/image/updateImg/${this.id}`,
       formData
     ).subscribe({
       next: () => {
