@@ -19,7 +19,7 @@ import com.re.api.service.wishListService;
 
 @RestController
 @RequestMapping("/wishlist")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://renteasy-six.vercel.app/")
 public class WishListController {
 
     @Autowired
