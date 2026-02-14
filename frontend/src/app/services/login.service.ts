@@ -11,7 +11,7 @@ export class LoginService {
   loginUser(username: string, password: string): Observable<any> {
     console.log('service :', username);
     console.log('service :', password);
-    const url = 'http://localhost:8091/user/login';
+    const url = 'renteasy-production.up.railway.app';
     return this.http
       .post<any>(url, { username, password })
       .pipe(catchError(this.handleError));
