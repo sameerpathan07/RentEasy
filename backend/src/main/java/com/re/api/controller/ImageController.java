@@ -26,7 +26,7 @@ import com.re.api.dto.ImageRequest;
 import com.re.api.entity.Image;
 import com.re.api.service.ImageService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://renteasy-six.vercel.app/")
 @RestController
 @RequestMapping("/image")
 public class ImageController {
