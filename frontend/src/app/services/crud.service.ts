@@ -8,7 +8,7 @@ export class CrudService {
 
 constructor(private http: HttpClient) { }
 
-private api = 'http://localhost:8091/user';
+private api = 'renteasy-production.up.railway.app';
 
   getProfile(userName: string) {
     return this.http.get<any>(`${this.api}/profile/${userName}`);
