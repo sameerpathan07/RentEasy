@@ -42,7 +42,7 @@ export class MyRentalsComponent implements OnInit {
 
     if (this.activeSection === 'wishlist') {
       this.http
-        .get<any[]>(`http://localhost:8091/wishlist/${this.userName}`)
+        .get<any[]>(`renteasy-production.up.railway.app/wishlist/${this.userName}`)
         .subscribe({
           next: res => {
             this.wishlist = res;
@@ -57,7 +57,7 @@ export class MyRentalsComponent implements OnInit {
 
     if (this.activeSection === 'applications') {
   this.http
-    .get<any[]>(`http://localhost:8091/application/tenant/${this.userName}`)
+    .get<any[]>(`renteasy-production.up.railway.app/application/tenant/${this.userName}`)
     .subscribe({
       next: res => {
   this.applications = res
@@ -112,7 +112,7 @@ export class MyRentalsComponent implements OnInit {
   }
 
   this.http
-    .delete(`http://localhost:8091/application/delete/${appId}`)
+    .delete(`renteasy-production.up.railway.app/application/delete/${appId}`)
     .subscribe({
       next: () => {
         //  remove from UI instantly
