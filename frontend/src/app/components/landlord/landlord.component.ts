@@ -49,7 +49,7 @@ openProperty(id: number) {
     this.loading = true;
 
     this.http
-      .get<any[]>(`http://localhost:8091/application/user/${this.userName}`)
+      .get<any[]>(`renteasy-production.up.railway.app/application/user/${this.userName}`)
       .subscribe({
         next: res => {
           this.applications = res;
@@ -67,7 +67,7 @@ openProperty(id: number) {
  updateStatus(appId: number, status: string) {
   this.http
     .put(
-      `http://localhost:8091/application/update/${appId}?status=${status}`,
+      `renteasy-production.up.railway.app/application/update/${appId}?status=${status}`,
       {}
     )
     .subscribe({
@@ -88,7 +88,7 @@ deleteApplication(appId: number) {
   }
 
   this.http
-    .delete(`http://localhost:8091/application/delete/${appId}`)
+    .delete(`renteasy-production.up.railway.app/application/delete/${appId}`)
     .subscribe({
       next: () => {
         // 🔥 remove from UI instantly
@@ -121,7 +121,7 @@ switchTab(tab: 'properties' | 'applications') {
   this.loadingProperties = true;
 
   this.http
-    .get<any[]>(`http://localhost:8091/image/my/${this.userName}`)
+    .get<any[]>(`renteasy-production.up.railway.app/image/my/${this.userName}`)
     .subscribe({
       next: res => {
         this.properties = res;
