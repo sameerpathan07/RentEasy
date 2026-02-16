@@ -11,11 +11,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.re.api.dto.ApplicationRepo; // ✅ Added
 import com.re.api.dto.ImageRepo;
 import com.re.api.dto.ImageRequest;
 import com.re.api.dto.UserRepo;
+import com.re.api.dto.WishListRepo; // ✅ Added
+import com.re.api.entity.Application; // ✅ Added
 import com.re.api.entity.Image;
 import com.re.api.entity.User;
+import com.re.api.entity.WishList; // ✅ Added
+
+import jakarta.transaction.Transactional; // ✅ Added for safe deletion
 
 @Repository
 public class ImageDao implements ImageInterface {
@@ -25,9 +31,15 @@ public class ImageDao implements ImageInterface {
 
     @Autowired
     UserRepo repo2;
+    
+    @Autowired
+    ApplicationRepo appRepo; // ✅ Inject Application Repo
+    
+    @Autowired
+    WishListRepo wishListRepo; // ✅ Inject WishList Repo
 
     @Autowired
-    Cloudinary cloudinary; // ✅ Inject Cloudinary
+    Cloudinary cloudinary;
 
     @Override
     public Image addImg(ImageRequest req, MultipartFile image) throws IOException {
@@ -48,14 +60,11 @@ public class ImageDao implements ImageInterface {
 
         img.setUser(owner);
 
-        // ✅ UPLOAD TO CLOUDINARY
-        // This takes the file bytes, uploads to cloud, and returns a Map of result data
+        // Upload to Cloudinary
         Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
-        
-        // Extract the public web URL
         String url = (String) uploadResult.get("url");
         
-        img.setImageUrl(url); // Save the Cloudinary URL to DB
+        img.setImageUrl(url);
 
         return repo.save(img);
     }
@@ -66,14 +75,11 @@ public class ImageDao implements ImageInterface {
         Image existing = repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
 
-        // Update image ONLY if a new one is provided
         if (image != null && !image.isEmpty()) {
-            // ✅ UPLOAD NEW IMAGE TO CLOUDINARY
             Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
             String url = (String) uploadResult.get("url");
             property.setImageUrl(url);
         } else {
-            // Keep existing URL if no new image uploaded
             property.setImageUrl(existing.getImageUrl());
         }
 
@@ -81,29 +87,36 @@ public class ImageDao implements ImageInterface {
         return repo.save(property);
     }
 
-	@Override
-	public void deleteImg(int id) {
-		
-		repo.deleteById(id);
-		
-		//return "Image deleted Successfully";
-	}
+    @Override
+    @Transactional // ✅ Important: Ensures all deletions happen together or fails together
+    public void deleteImg(int id) {
+        
+        // 1. Delete associated WishList items first
+        // Assuming WishList has a field 'property' mapping to Image
+        List<WishList> wishLists = wishListRepo.findByProperty_Id(id);
+        wishListRepo.deleteAll(wishLists);
+        
+        // 2. Delete associated Applications
+        // Assuming Application has a field 'image' mapping to Image
+        List<Application> applications = appRepo.findByImage_Id(id);
+        appRepo.deleteAll(applications);
+        
+        // 3. Now it is safe to delete the Image
+        repo.deleteById(id);
+    }
 
-	@Override
-	public Optional<Image> viewImg(int id) {
-		
-		return repo.findById(id);
-	}
+    @Override
+    public Optional<Image> viewImg(int id) {
+        return repo.findById(id);
+    }
 
-	@Override
-	public List<Image> viewAllImgs() {
-		
-		return repo.findAll();
-	}
+    @Override
+    public List<Image> viewAllImgs() {
+        return repo.findAll();
+    }
 
-	
+    @Override
     public List<Image> getMyProperties(String userName) {
         return repo.findByUser_UserNameOrderByIdDesc(userName);
     }
-
 }
