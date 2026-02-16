@@ -1,123 +1,164 @@
 package com.re.api.dao;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
-import com.re.api.dto.ApplicationRepo; // ✅ Added
+import com.re.api.dto.ApplicationRepo;
+import com.re.api.dto.ApplicationRequest;
 import com.re.api.dto.ImageRepo;
-import com.re.api.dto.ImageRequest;
+import com.re.api.dto.MailRequest;
 import com.re.api.dto.UserRepo;
-import com.re.api.dto.WishListRepo; // ✅ Added
-import com.re.api.entity.Application; // ✅ Added
+import com.re.api.entity.Application;
 import com.re.api.entity.Image;
 import com.re.api.entity.User;
-import com.re.api.entity.WishList; // ✅ Added
 
-import jakarta.transaction.Transactional; // ✅ Added for safe deletion
+import jakarta.transaction.Transactional;
 
 @Repository
-public class ImageDao implements ImageInterface {
+public class ApplicationDao {
+	
+	@Autowired
+	private JavaMailSender mailsender;
 
     @Autowired
-    ImageRepo repo;
+    private ApplicationRepo repo;
 
     @Autowired
-    UserRepo repo2;
-    
-    @Autowired
-    ApplicationRepo appRepo; // ✅ Inject Application Repo
-    
-    @Autowired
-    WishListRepo wishListRepo; // ✅ Inject WishList Repo
+    private ImageRepo imageRepo;
 
     @Autowired
-    Cloudinary cloudinary;
+    private UserRepo userRepo;
 
-    @Override
-    public Image addImg(ImageRequest req, MultipartFile image) throws IOException {
+    @Transactional
+    public void apply(int imageId, ApplicationRequest dto) {
 
-        User owner = repo2.findByUserName(req.getUserName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Image img = new Image();
-        img.setTitle(req.getTitle());
-        img.setType(req.getType());
-        img.setPrice(req.getPrice());
-        img.setLocation(req.getLocation());
-        img.setBedrooms(req.getBedrooms());
-        img.setBathrooms(req.getBathrooms());
-        img.setArea(req.getArea());
-        img.setDescription(req.getDescription());
-        img.setAvailable(req.isAvailable());
-
-        img.setUser(owner);
-
-        // Upload to Cloudinary
-        Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
-        String url = (String) uploadResult.get("url");
-        
-        img.setImageUrl(url);
-
-        return repo.save(img);
-    }
-
-    @Override
-    public Image updateImg(int id, Image property, MultipartFile image) throws IOException {
-        
-        Image existing = repo.findById(id)
+        Image image = imageRepo.findById(imageId)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
 
-        if (image != null && !image.isEmpty()) {
-            Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
-            String url = (String) uploadResult.get("url");
-            property.setImageUrl(url);
-        } else {
-            property.setImageUrl(existing.getImageUrl());
+        User tenant = userRepo.findById(dto.getTenant())
+                .orElseThrow(() -> new RuntimeException("Tenant not found"));
+
+        // landlord comes from property ownership
+        User landlord = image.getUser();
+
+        // Prevent duplicate application
+        boolean exists =
+                repo.existsByImage_IdAndTenant_UserName(imageId, tenant.getUserName());
+
+        if (exists) {
+            throw new RuntimeException("Already applied");
         }
-
-        property.setId(id);
-        return repo.save(property);
-    }
-
-    @Override
-    @Transactional // ✅ Important: Ensures all deletions happen together or fails together
-    public void deleteImg(int id) {
         
-        // 1. Delete associated WishList items first
-        // Assuming WishList has a field 'property' mapping to Image
-        List<WishList> wishLists = wishListRepo.findByProperty_Id(id);
-        wishListRepo.deleteAll(wishLists);
+        SimpleMailMessage message=new SimpleMailMessage();
+
+        Application app = new Application();
+        app.setImage(image);
+        app.setTenant(tenant);
+        app.setLandlord(landlord);
+        app.setAddress(dto.getAddress());
+        app.setMeetingDate(dto.getDate());
+        app.setEmail(dto.getEmail());      
+        app.setPhoneNo(dto.getPhoneNo());
+        app.setStatus("PENDING");
+
+        repo.save(app);
         
-        // 2. Delete associated Applications
-        // Assuming Application has a field 'image' mapping to Image
-        List<Application> applications = appRepo.findByImage_Id(id);
-        appRepo.deleteAll(applications);
-        
-        // 3. Now it is safe to delete the Image
-        repo.deleteById(id);
+message.setTo(landlord.getEmail());
+		
+		message.setSubject("Property Rental Request");
+		
+		message.setText("I hope you are doing well.\r\n"
+				+ "\r\n"
+				+ "My name is "+dto.getName()+", and I am interested in renting the property located at the address mentioned below:\r\n"
+				+ "\r\n"
+				+ "Property Address:\r\n"
+				+ app.getAddress()+"\r\n"
+				+ "\r\n"
+				+ "I would like to schedule a meeting on "+app.getMeetingDate()+" to discuss the rental details, availability, and further process.\r\n"
+				+ "\r\n"
+				+ "You can contact me at:\r\n"
+				+ "Phone Number: "+app.getPhoneNo()+"\r\n"
+				+ "Email Address: "+app.getEmail()+"\r\n"
+				+ "\r\n"
+				+ "Thank you for your time and consideration. I look forward to your response.\r\n"
+				+ "\r\n"
+				+ "Best regards,\r\n"
+				+dto.getName()+"");
+		
+		mailsender.send(message);
+    }
+    
+    public void updateStatus( int appId, String status) {
+    	Application app = repo.findById(appId)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
+    	
+    	   if (!status.equalsIgnoreCase("APPROVED")
+    	            && !status.equalsIgnoreCase("REJECTED")
+    	            && !status.equalsIgnoreCase("PENDING")) {
+    	        throw new RuntimeException("Invalid status");
+    	    }
+    	   app.setStatus(status);
+    	   
+    	   repo.save(app);
+			
+		
     }
 
-    @Override
-    public Optional<Image> viewImg(int id) {
-        return repo.findById(id);
+    //LANDLORD VIEW
+    public List<Application> getForLandlord(String userName) {
+        return repo.findByLandlord_UserNameOrderByCreatedAtDesc(userName);
     }
 
-    @Override
-    public List<Image> viewAllImgs() {
-        return repo.findAll();
+    // TENANT VIEW
+    public List<Application> getForTenant(String userName) {
+        return repo.findByTenant_UserNameOrderByCreatedAtDesc(userName);
     }
+    
+    @Transactional
+    public void deleteApplication(int appId) {
+        Application app = repo.findById(appId)
+            .orElseThrow(() -> new RuntimeException("Application not found"));
 
-	
-    public List<Image> getMyProperties(String userName) {
-        return repo.findByUser_UserNameOrderByIdDesc(userName);
+        repo.delete(app);
     }
+    
+    
+    public void sendSimplMail(int id) {
+    	
+    	SimpleMailMessage message=new SimpleMailMessage();
+    	
+    	Application app=repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
 
+		
+		message.setTo(app.getEmail());
+		
+		message.setSubject("Property Rental Request");
+		
+		message.setText("I hope you are doing well.\r\n"
+				+ "\r\n"
+				+ "My name is "+app.getTenant()+", and I am interested in renting the property located at the address mentioned below:\r\n"
+				+ "\r\n"
+				+ "Property Address:\r\n"
+				+ app.getAddress()+"\r\n"
+				+ "\r\n"
+				+ "I would like to schedule a meeting on "+app.getMeetingDate()+" to discuss the rental details, availability, and further process.\r\n"
+				+ "\r\n"
+				+ "You can contact me at:\r\n"
+				+ "Phone Number: "+app.getPhoneNo()+"\r\n"
+				+ "Email Address: "+app.getEmail()+"\r\n"
+				+ "\r\n"
+				+ "Thank you for your time and consideration. I look forward to your response.\r\n"
+				+ "\r\n"
+				+ "Best regards,\r\n"
+				+app.getTenant()+"");
+		
+		mailsender.send(message);
+    }
+    
+    
 }
