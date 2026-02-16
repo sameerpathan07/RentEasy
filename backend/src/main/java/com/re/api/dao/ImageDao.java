@@ -1,17 +1,16 @@
 package com.re.api.dao;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.re.api.dto.ImageRepo;
 import com.re.api.dto.ImageRequest;
 import com.re.api.dto.UserRepo;
@@ -21,75 +20,66 @@ import com.re.api.entity.User;
 @Repository
 public class ImageDao implements ImageInterface {
 
-	@Autowired
-	ImageRepo repo;
-	
-	@Autowired
-	UserRepo repo2;
-	
-	@Override
-	public Image addImg(ImageRequest req, MultipartFile image) throws IOException {
+    @Autowired
+    ImageRepo repo;
 
-	    
-	    User owner = repo2.findByUserName(req.getUserName())
-	            .orElseThrow(() -> new RuntimeException("User not found"));
+    @Autowired
+    UserRepo repo2;
 
-	    
-	    Image img = new Image();
-	    img.setTitle(req.getTitle());
-	    img.setType(req.getType());
-	    img.setPrice(req.getPrice());
-	    img.setLocation(req.getLocation());
-	    img.setBedrooms(req.getBedrooms());
-	    img.setBathrooms(req.getBathrooms());
-	    img.setArea(req.getArea());
-	    img.setDescription(req.getDescription());
-	    img.setAvailable(req.isAvailable());
+    @Autowired
+    Cloudinary cloudinary; // ✅ Inject Cloudinary
 
-	    
-	    img.setUser(owner);
+    @Override
+    public Image addImg(ImageRequest req, MultipartFile image) throws IOException {
 
-	
-	    String uploadDir = System.getProperty("user.dir") + "/uploads/";
-	    File dir = new File(uploadDir);
-	    if (!dir.exists()) dir.mkdirs();
+        User owner = repo2.findByUserName(req.getUserName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-	    String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-	    Path path = Paths.get(uploadDir, fileName);
-	    Files.copy(image.getInputStream(), path);
+        Image img = new Image();
+        img.setTitle(req.getTitle());
+        img.setType(req.getType());
+        img.setPrice(req.getPrice());
+        img.setLocation(req.getLocation());
+        img.setBedrooms(req.getBedrooms());
+        img.setBathrooms(req.getBathrooms());
+        img.setArea(req.getArea());
+        img.setDescription(req.getDescription());
+        img.setAvailable(req.isAvailable());
 
-	    
-	    img.setImageUrl("http://localhost:8091/uploads/" + fileName);
+        img.setUser(owner);
 
-	    
-	    return repo.save(img);
-	}
+        // ✅ UPLOAD TO CLOUDINARY
+        // This takes the file bytes, uploads to cloud, and returns a Map of result data
+        Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+        
+        // Extract the public web URL
+        String url = (String) uploadResult.get("url");
+        
+        img.setImageUrl(url); // Save the Cloudinary URL to DB
 
-	@Override
-	public Image updateImg(int id,Image property, MultipartFile image)throws IOException {
-		
-		Image existing = repo.findById(id)
-	            .orElseThrow(() -> new RuntimeException("Property not found"));
+        return repo.save(img);
+    }
 
-	    // update image if new one uploaded
-	    if (image != null && !image.isEmpty()) {
-	        String uploadDir = System.getProperty("user.dir") + "/uploads/";
-	        File dir = new File(uploadDir);
-	        if (!dir.exists()) dir.mkdirs();
+    @Override
+    public Image updateImg(int id, Image property, MultipartFile image) throws IOException {
+        
+        Image existing = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
 
-	        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-	        Path path = Paths.get(uploadDir + fileName);
-	        Files.copy(image.getInputStream(), path);
+        // Update image ONLY if a new one is provided
+        if (image != null && !image.isEmpty()) {
+            // ✅ UPLOAD NEW IMAGE TO CLOUDINARY
+            Map uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String url = (String) uploadResult.get("url");
+            property.setImageUrl(url);
+        } else {
+            // Keep existing URL if no new image uploaded
+            property.setImageUrl(existing.getImageUrl());
+        }
 
-	        property.setImageUrl("http://localhost:8091/uploads/" +fileName);
-	    } else {
-	        property.setImageUrl(existing.getImageUrl());
-	    }
-
-	    property.setId(id);
-			return repo.save(property);
-		
-	}
+        property.setId(id);
+        return repo.save(property);
+    }
 
 	@Override
 	public void deleteImg(int id) {
