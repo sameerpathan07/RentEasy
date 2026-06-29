@@ -16,7 +16,7 @@ public class WebConfig {
 	            public void addCorsMappings(CorsRegistry registry) {
 	                registry.addMapping("/**") // apply to all endpoints
 	                        .allowedOrigins("https://renteasy-eta.vercel.app",
-                    "https://renteasy-6ebgsiyn5-sameerpathan07s-projects.vercel.app","https://renteasy-six.vercel.app/") // Angular app
+                    "https://renteasy-6ebgsiyn5-sameerpathan07s-projects.vercel.app","https://renteasy-six.vercel.app") // Angular app
 	                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // allow preflighted DELETE
 	                        .allowedHeaders("*")
 	                        .allowCredentials(true);
