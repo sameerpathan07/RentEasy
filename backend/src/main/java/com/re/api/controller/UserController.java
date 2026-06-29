@@ -19,7 +19,8 @@ import com.re.api.dto.UpdateProfileRequest;
 import com.re.api.entity.User;
 import com.re.api.service.UserService;
 
-@CrossOrigin(origins = "https://renteasy-six.vercel.app/")
+@CrossOrigin(origins = "https://renteasy-eta.vercel.app/",
+                    "https://renteasy-6ebgsiyn5-sameerpathan07s-projects.vercel.app/")
 @RestController
 @RequestMapping("/user")
 public class UserController {
