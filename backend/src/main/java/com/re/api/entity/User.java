@@ -10,18 +10,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
+@Table(name = "users")
 public class User {
 
-	@Id
-	private String userName;
-	private String password;
-	private String email;
-	private String role;
-	private String phoneNo;
-	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user") 
-	@JsonIgnore
-	private List<Image> properties;
+    @Id
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "phone_no")
+    private String phoneNo;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonIgnore
+    private List<Image> properties;
 
 	
 	public User() {
