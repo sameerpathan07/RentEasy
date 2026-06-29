@@ -20,4 +20,6 @@ public interface ImageInterface {
     Optional<Image> viewImg(int id);
 
     List<Image> viewAllImgs();
+
+    List<Image> getMyProperties(String userName);
 }
