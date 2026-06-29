@@ -26,8 +26,10 @@ import com.re.api.dto.ImageRequest;
 import com.re.api.entity.Image;
 import com.re.api.service.ImageService;
 
-@CrossOrigin(origins = "https://renteasy-eta.vercel.app",
-                    "https://renteasy-6ebgsiyn5-sameerpathan07s-projects.vercel.app")
+@CrossOrigin(origins = {
+    "https://renteasy-eta.vercel.app",
+    "https://renteasy-6ebgsiyn5-sameerpathan07s-projects.vercel.app"
+})
 @RestController
 @RequestMapping("/image")
 public class ImageController {
