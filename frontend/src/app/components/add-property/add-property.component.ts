@@ -66,7 +66,7 @@ saveProperty() {
   );
  
 
-  this.http.post('https://renteasy-production.up.railway.app/image/addProp', formData)
+  this.http.post('https://renteasy-fix3.onrender.com/image/addProp', formData)
     .subscribe({
       next: () => {
         alert('Property Added Successfully');
