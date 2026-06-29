@@ -16,4 +16,6 @@ public interface ApplicationRepo extends JpaRepository<Application, Integer>{
     
     boolean existsByImage_IdAndTenant_UserName(int imageId, String userName);
 
+	List<Application> findByImage_Id(int imageId);
+
 }
