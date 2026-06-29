@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class PropertyService {
 
 
-private apiUrl = 'https://renteasy-production.up.railway.app/image';
+private apiUrl = 'https://renteasy-fix3.onrender.com.app/image';
 
   constructor(private http: HttpClient) {}
 
@@ -20,13 +20,13 @@ private apiUrl = 'https://renteasy-production.up.railway.app/image';
 
 getAll(): Observable<Property[]> {
   return this.http.get<Property[]>(
-    'https://renteasy-production.up.railway.app/image/getAllImg'
+    'https://renteasy-fix3.onrender.com.app/image/getAllImg'
   );
 }
 
 getAllMy(): Observable<Property[]> {
   return this.http.get<Property[]>(
-    'https://renteasy-production.up.railway.app/image/my'
+    'https://renteasy-fix3.onrender.com.app/image/my'
   );
 }
 
