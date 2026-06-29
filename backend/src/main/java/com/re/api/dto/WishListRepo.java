@@ -22,4 +22,6 @@ public interface WishListRepo extends JpaRepository<WishList, Integer> {
     @Transactional
     void deleteByUser_UserNameAndProperty_Id(String userName, int propertyId);
 
+     List<WishList> findByProperty_Id(int propertyId);
+
 }
