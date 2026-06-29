@@ -24,7 +24,7 @@ import com.re.api.service.ApplicationService;
 @RequestMapping("/application")
 @CrossOrigin(origins = {
     "https://renteasy-eta.vercel.app",
-    "https://renteasy-6ebgsiyn5-sameerpathan07s-projects.vercel.app"
+    "https://renteasy-6ebgsiyn5-sameerpathan07s-projects.vercel.app","https://renteasy-six.vercel.app"
 })
 public class ApplicationController {
 
